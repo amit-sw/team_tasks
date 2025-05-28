@@ -1,9 +1,26 @@
 import express from "express";
 import { db, admin } from "../config/firebase.js";
-import OpenAI from "openai";
+import { ChatOpenAI } from "@langchain/openai";
 import jwt from "jsonwebtoken";
+import { Client } from "langsmith"; // Import Langsmith Client
 
 const router = express.Router();
+
+// Initialize Langsmith Client conditionally
+if (process.env.LANGCHAIN_API_KEY && process.env.LANGCHAIN_TRACING_V2 === 'true') {
+  const client = new Client({
+    apiKey: process.env.LANGCHAIN_API_KEY,
+    // Langsmith project name can be set here or through LANGCHAIN_PROJECT env var
+    // apiUrl: "https://api.smith.langchain.com", // Optional: defaults to this
+  });
+  // The client is initialized, but for basic tracing, Langchain relies on env vars.
+  // No specific methods need to be called on 'client' for tracing chatModel.invoke
+  console.log("Langsmith client initialized. Project:", process.env.LANGCHAIN_PROJECT || "Default Project (check LANGCHAIN_PROJECT env var)");
+} else {
+  if (process.env.LANGCHAIN_TRACING_V2 === 'true') {
+    console.log("Langsmith tracing is enabled (LANGCHAIN_TRACING_V2=true), but LANGCHAIN_API_KEY is missing. Traces will not be sent to Langsmith.");
+  }
+}
 
 // Middleware to require authentication
 function requireAuth(req, res, next) {
@@ -75,26 +92,28 @@ router.post('/', requireAuth, async (req, res) => {
     if (!openAIApiKey) {
       throw new Error('OPENAI_API_KEY not set in environment');
     }
+
+    const openAIModel = process.env.OPENAI_MODEL;
+    if (!openAIModel) {
+      throw new Error('OPENAI_MODEL not set in environment');
+    }
     
-    // Create OpenAI client
-    const openai = new OpenAI({
-      apiKey: openAIApiKey
+    // Initialize ChatOpenAI
+    const chatModel = new ChatOpenAI({
+      openAIApiKey: openAIApiKey,
+      modelName: openAIModel,
     });
     
-    // Call chat completions API
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: inputText }
-      ],
-      temperature: 0.7,
-    });
+    // Call Langchain invoke
+    const completion = await chatModel.invoke([
+      { type: "system", content: systemPrompt },
+      { type: "user", content: inputText }
+]);
     
-    aiResponse = completion.choices[0].message.content;
+    aiResponse = completion.content;
   } catch (err) {
-    console.error('[OpenAI] Error getting AI response:', err);
-    await db.collection('AI_chats').doc(chatId).update({ Response: 'OpenAI error: ' + err.message });
+    console.error('[Langchain] Error getting AI response:', err);
+    await db.collection('AI_chats').doc(chatId).update({ Response: 'Langchain error: ' + err.message });
     return res.status(500).json({ error: 'Failed to get AI response', details: err.message });
   }
 
