@@ -1,5 +1,21 @@
-const admin = require('firebase-admin');
-require('dotenv').config();
+import admin from 'firebase-admin';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from .env file in the server directory
+dotenv.config({ path: join(dirname(__dirname), '.env') });
+
+// Debug log environment variables
+console.log('Firebase Environment Variables:', {
+  projectId: process.env.FIREBASE_PROJECT_ID ? 'Set' : 'Not set',
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL ? 'Set' : 'Not set',
+  privateKey: process.env.FIREBASE_PRIVATE_KEY ? 'Set (length: ' + process.env.FIREBASE_PRIVATE_KEY.length + ')' : 'Not set'
+});
 
 // Initialize Firebase Admin SDK with Service Account
 const initializeFirebase = () => {
@@ -138,7 +154,7 @@ const dbHelpers = {
   }
 };
 
-module.exports = {
+export {
   admin,
   db,
   initializeFirebase

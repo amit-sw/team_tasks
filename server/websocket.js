@@ -1,10 +1,10 @@
-const WebSocket = require('ws');
-const jwt = require('jsonwebtoken');
+import { WebSocketServer, WebSocket } from 'ws';
+import jwt from 'jsonwebtoken';
 
 let wss;
 
 const initializeWebSocket = (server) => {
-  wss = new WebSocket.Server({ server });
+  wss = new WebSocketServer({ server });
 
   wss.on('connection', (ws, req) => {
     console.log('--- New WebSocket connection ---');
@@ -73,7 +73,7 @@ const notifyUser = (userEmail, data) => {
   });
 };
 
-module.exports = {
+export {
   initializeWebSocket,
   notifyUser
 };

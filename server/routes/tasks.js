@@ -1,10 +1,10 @@
 // routes/tasks.js
-const express = require('express');
-const router = express.Router();
-const Task = require('../models/task');
+import express from 'express';
+import Task from '../models/task.js';
+import { db, admin } from '../config/firebase.js';
+import jwt from 'jsonwebtoken';
 
-// Firestore setup
-const { db, admin } = require('../config/firebase');
+const router = express.Router();
 
 // Middleware to require authentication (placeholder)
 function requireAuth(req, res, next) {
@@ -14,7 +14,7 @@ function requireAuth(req, res, next) {
     const token = authHeader.split(' ')[1];
     console.log('[requireAuth] Extracted token:', token);
     try {
-      const jwt = require('jsonwebtoken');
+      // jwt is already imported at the top
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       console.log('[requireAuth] Decoded user:', decoded);
@@ -219,4 +219,4 @@ router.patch('/:id/restore', requireAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

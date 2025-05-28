@@ -26,6 +26,20 @@
 - JWT-based authentication is used. All frontend API requests to protected endpoints must include the JWT in the `Authorization` header as a Bearer token.
 
 ### Firestore Setup
+
+### AI Tab (AI_chats Collection)
+- Ensure Firestore has a collection named `AI_chats`.
+- Each document will include: `user_id`, `inputText`, `createdAt`, `updated_at`.
+
+### Backend API
+- The backend must expose a POST endpoint at `/api/ai-chats`.
+- Endpoint requires JWT authentication and writes to `AI_chats`.
+- After saving the user input, the backend fetches the latest `AI_prompts` record (where `prompt_name` = "AI_Tasks" and `status` = "Active"), calls OpenAI via Langchain, and saves/returns the response in the same `AI_chats` record and to the user.
+
+### Frontend
+- The `/ai` route is available and shows the AI tab with a text input and submit button.
+- Button is disabled until text is entered.
+- On submit, the input is sent to the backend with the user's JWT.
 Ensure a `tasks` collection exists in Firestore. Each task document must have the following fields:
 - `completionDate`: timestamp (set automatically when a task is completed; null otherwise)
 - `deletionDate`: timestamp (set automatically when a task is deleted; null otherwise)

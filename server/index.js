@@ -1,15 +1,27 @@
-require('dotenv').config({ path: __dirname + '/.env' });
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-// Import routes
-const { router: authRoutes } = require('./routes/auth');
-const tasksRoutes = require('./routes/tasks');
-const adminRoutes = require('./routes/admin');
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const http = require('http');
+// Load environment variables from .env file
+dotenv.config({ path: join(__dirname, '.env') });
+
+// Debug log environment variables
+console.log('Environment loaded, JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import authRoutes from './routes/auth.js';
+import tasksRoutes from './routes/tasks.js';
+import adminRoutes from './routes/admin.js';
+import aiChatsRoutes from './routes/ai_chats.js';
+import http from 'http';
+import { initializeWebSocket } from './websocket.js';
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -56,6 +68,7 @@ app.use('/api/tasks', (req, res, next) => {
   next();
 }, tasksRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/ai-chats', aiChatsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -71,7 +84,6 @@ app.get('/health', (req, res) => {
 const server = http.createServer(app);
 
 // Initialize WebSocket server
-const { initializeWebSocket } = require('./websocket');
 initializeWebSocket(server);
 
 server.listen(PORT, () => {

@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const { oauth2Client } = require('../config/google');
+import jwt from 'jsonwebtoken';
+import { oauth2Client } from '../config/google.js';
 
 const refreshAccessToken = async (refreshToken) => {
   oauth2Client.setCredentials({
@@ -51,7 +51,7 @@ const createNewToken = (oldToken, newAccessToken) => {
   }
 };
 
-module.exports = {
+export {
   refreshAccessToken,
   isTokenExpired,
   createNewToken

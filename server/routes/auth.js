@@ -1,12 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const { google } = require('googleapis');
-const { oauth2Client, getAuthUrl } = require('../config/google');
-const { admin, db, getUserCollectionPath } = require('../config/firebase');
-const jwt = require('jsonwebtoken');
-const { USER_ROLES, getUserRole, initializeOwner } = require('../models/userRoles');
+import express from 'express';
+import { google } from 'googleapis';
+import { oauth2Client, getAuthUrl } from '../config/google.js';
+import { admin, db } from '../config/firebase.js';
+import jwt from 'jsonwebtoken';
+import { USER_ROLES, getUserRole, initializeOwner } from '../models/userRoles.js';
+import { refreshAccessToken, isTokenExpired, createNewToken } from '../utils/tokenRefresh.js';
 
-const { refreshAccessToken, isTokenExpired, createNewToken } = require('../utils/tokenRefresh');
+const router = express.Router();
 
 // Verify JWT middleware with token refresh
 const verifyToken = async (req, res, next) => {
@@ -181,4 +181,5 @@ router.get('/verify', verifyToken, (req, res) => {
 
 
 
-module.exports = { router, verifyToken };
+export { verifyToken };
+export default router;

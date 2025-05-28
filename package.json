@@ -19,6 +19,7 @@
     "@testing-library/user-event": "^13.5.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.5.0",
+    "langchain": "^0.3.27",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",

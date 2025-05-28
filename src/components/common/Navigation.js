@@ -74,6 +74,20 @@ const Navigation = () => {
   >
     Archived Tasks
   </Button>
+  <Button
+    component={Link}
+    to="/ai"
+    color="inherit"
+    sx={{
+      my: 1,
+      color: 'white',
+      display: 'block',
+      marginLeft: 'auto',
+      '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' }
+    }}
+  >
+    AI
+  </Button>
 </Box>
 
         <Box>

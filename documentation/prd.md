@@ -13,12 +13,16 @@ Transition from notes attached to calendar events to a user-centric task managem
   - A single text input field.
   - A Submit button, which is disabled until the field has text.
   - When Submit is pressed, the input is sent to the backend.
-- Backend stores each submission in a new Firestore collection called `AI_chats` with the following fields:
-  - `user_id`: The ID or email of the user submitting the input.
-  - `inputText`: The text entered by the user.
-  - `createdAt`: Timestamp when the record is created.
-  - `updated_at`: Timestamp when the record is last updated (initially same as createdAt).
-- Users can view, add, edit, complete, and soft-delete tasks.
+- Backend workflow:
+  1. Stores each submission in a new Firestore collection called `AI_chats` with fields:
+     - `user_id`: The ID or email of the user submitting the input.
+     - `inputText`: The text entered by the user.
+     - `createdAt`: Timestamp when the record is created.
+     - `updated_at`: Timestamp when the record is last updated (initially same as createdAt).
+  2. Fetches the latest record from the Firestore collection `AI_prompts` where `prompt_name` is "AI_Tasks" and `status` is "Active".
+  3. Uses the `text` field from this prompt as the system prompt for OpenAI (via Langchain), and the user's input as the human prompt.
+  4. Gets the response from OpenAI, saves it in the same `AI_chats` record as the field `Response`, and returns it to the frontend.
+- The frontend displays the AI response to the user after submit.- Users can view, add, edit, complete, and soft-delete tasks.
 - Soft-deleted tasks are accessible in a separate "Deleted Tasks" tab.
 - Completed tasks are accessible in a separate "Completed Tasks" tab.
 - Completed tasks display a "Completion Date" field in the UI.

@@ -1,5 +1,5 @@
 // models/task.js
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 class Task {
   constructor({ id, userId, title, description = '', dueDate = null, status = 'active', createdAt = null, updatedAt = null }) {
@@ -14,4 +14,4 @@ class Task {
   }
 }
 
-module.exports = Task;
+export default Task;

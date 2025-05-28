@@ -1,4 +1,4 @@
-const { USER_ROLES } = require('../models/userRoles');
+import { USER_ROLES } from '../models/userRoles.js';
 
 const checkRole = (allowedRoles) => {
   return (req, res, next) => {
@@ -21,7 +21,7 @@ const requireAdmin = checkRole([USER_ROLES.ADMIN, USER_ROLES.OWNER]);
 // Middleware for owner-only routes
 const requireOwner = checkRole([USER_ROLES.OWNER]);
 
-module.exports = {
+export {
   checkRole,
   requireAdmin,
   requireOwner

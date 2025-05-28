@@ -15,6 +15,7 @@ import DeletedTasks from './components/tasks/DeletedTasks';
 import CompletedTasks from './components/tasks/CompletedTasks';
 import UserManagement from './components/admin/UserManagement';
 import Navigation from './components/common/Navigation';
+import AITab from './components/ai/AITab';
 
 // Services
 import WebSocketService from './services/websocket';
@@ -153,6 +154,21 @@ function App() {
                 }
               />
             )}
+            <Route
+              path="/ai"
+              element={
+                isAuthenticated ? (
+                  <Box>
+                    <Navigation />
+                    <Box sx={{ p: 3 }}>
+                      <AITab />
+                    </Box>
+                  </Box>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
             <Route path="/" element={<Navigate to="/tasks" />} />
           </Routes>
         </Router>

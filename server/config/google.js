@@ -1,5 +1,6 @@
-const { google } = require('googleapis');
-require('dotenv').config();
+import { google } from 'googleapis';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Debug log OAuth configuration
 console.log('OAuth Configuration:', {
@@ -30,7 +31,7 @@ const getAuthUrl = () => {
   });
 };
 
-module.exports = {
+export {
   oauth2Client,
   getAuthUrl
 };

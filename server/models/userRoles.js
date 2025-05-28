@@ -1,4 +1,4 @@
-const { db } = require('../config/firebase');
+import { db } from '../config/firebase.js';
 
 const USER_ROLES = {
   REGULAR: 'REGULAR',
@@ -105,7 +105,7 @@ const initializeOwner = async () => {
   }
 };
 
-module.exports = {
+export {
   USER_ROLES,
   getUserRole,
   setUserRole,

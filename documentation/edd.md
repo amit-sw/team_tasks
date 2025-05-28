@@ -24,6 +24,14 @@ Each document represents a task with the following fields:
   - `inputText` (string): Text input from the AI tab
   - `createdAt` (timestamp): When the record was created
   - `updated_at` (timestamp): When the record was last updated (same as createdAt on insert)
+  - `Response` (string): AI response from OpenAI (added after processing)
+
+### AI_prompts Collection
+- **Collection Name:** AI_prompts
+- **Fields:**
+  - `prompt_name` (string): Name of the prompt
+  - `text` (string): Prompt text
+  - `status` (enum): active, inactive (default: active)
 
 All queries must filter by `userId` and `status` as appropriate.
 
@@ -35,8 +43,8 @@ All endpoints interact with Firestore:
 - POST /api/tasks: Add new task document to `tasks` collection. Set `userId`, `createdAt`, `updatedAt`.
 - PUT /api/tasks/:id: Update task document (if `userId` matches req.user.id).
 - DELETE /api/tasks/:id: Set `status` to 'deleted', update `updatedAt` (soft-delete).
-- PATCH /api/tasks/:id/restore: Set `status` to 'active', update `updatedAt` (restore).
-- POST /api/ai-chats: Accepts `{ inputText: string }` in request body, requires authentication (JWT), and stores a new document in Firestore `AI_chats` collection with fields: `user_id`, `inputText`, `createdAt`, `updated_at`.
+- PATCH /api/tasks/:id/restore: Set `status` to 'active', update `updatedAt`.
+- POST /api/ai-chats: Accepts `{ inputText: string }` in request body, requires authentication (JWT), and stores a new document in Firestore `AI_chats` collection with fields: `user_id`, `inputText`, `createdAt`, `updated_at`. After saving, fetches the latest record from Firestore `AI_prompts` where `prompt_name` = "AI_Tasks" and `status` = "Active", uses the `text` field from this prompt as the system prompt for OpenAI (via Langchain), and the user's input as the human prompt. Gets the response from OpenAI, saves it in the same `AI_chats` record as `Response`, and returns it to the frontend.
 
 All operations must check that the task's `userId` matches the authenticated user.
 

@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { verifyToken } = require('./auth');
-const { requireAdmin, requireOwner } = require('../middleware/roleAuth');
-const { USER_ROLES, getUserRole, setUserRole, getAllUsers } = require('../models/userRoles');
-const { db } = require('../config/firebase');
+import { verifyToken } from './auth.js';
+import { requireAdmin, requireOwner } from '../middleware/roleAuth.js';
+import { USER_ROLES, getUserRole, setUserRole, getAllUsers } from '../models/userRoles.js';
+import { db } from '../config/firebase.js';
 
 // Get all users (Admin & Owner only)
 router.get('/users', verifyToken, requireAdmin, async (req, res) => {
@@ -116,4 +116,4 @@ router.put('/notes/:noteId', verifyToken, requireAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
