@@ -37,12 +37,13 @@ if (!process.env.JWT_SECRET) {
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['X-New-Token']
-}));
+//app.use(cors({
+//  origin: 'http://localhost:3000',
+//  credentials: true,
+//  allowedHeaders: ['Content-Type', 'Authorization'],
+//  exposedHeaders: ['X-New-Token']
+//}));
+app.use(cors());
 app.use(express.json());
 
 // Rate limiting
