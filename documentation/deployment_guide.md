@@ -55,3 +55,10 @@ The backend API sets these fields as appropriate, and the frontend expects them 
   - PATCH /api/tasks/:id/complete (mark as completed)
   - PATCH /api/tasks/:id/restore (restore soft-deleted)
 - For production, set environment variables securely
+
+### CORS Configuration
+- The server is configured to allow cross-origin requests from specific origins:
+  - `http://localhost:3000` (for local development)
+  - `https://team-tasks-client.onrender.com` (for production)
+- If you deploy the client to a different domain, update the CORS configuration in `server/index.js`
+- CORS is configured with credentials support enabled and specific headers allowed

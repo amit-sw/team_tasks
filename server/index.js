@@ -43,7 +43,12 @@ app.use(helmet());
 //  allowedHeaders: ['Content-Type', 'Authorization'],
 //  exposedHeaders: ['X-New-Token']
 //}));
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://team-tasks-client.onrender.com'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['X-New-Token']
+}));
 app.use(express.json());
 
 // Rate limiting
