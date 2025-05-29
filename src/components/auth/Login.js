@@ -5,11 +5,20 @@ import GoogleIcon from '@mui/icons-material/Google';
 const Login = () => {
   const handleGoogleLogin = async () => {
     try {
-      const API_BASE = process.env.REACT_APP_API_BASE || "";
+      // Determine the API base URL based on the environment
+      let API_BASE;
+      if (process.env.NODE_ENV === 'production') {
+        API_BASE = 'https://team-tasks-server.onrender.com';
+      } else {
+        API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3001';
+      }
+      console.log(`Using API base URL: ${API_BASE}`);
+      
       const response = await fetch(`${API_BASE}/api/auth/google/url`, {
         headers: {
           'Accept': 'application/json'
-        }
+        },
+        credentials: 'include' // Include credentials for CORS requests
       });
       const { url } = await response.json();
       window.location.href = url;

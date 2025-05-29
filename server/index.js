@@ -43,12 +43,18 @@ app.use(helmet());
 //  allowedHeaders: ['Content-Type', 'Authorization'],
 //  exposedHeaders: ['X-New-Token']
 //}));
+// Configure CORS with more detailed options
 app.use(cors({
   origin: ['http://localhost:3000', 'https://team-tasks-client.onrender.com'],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['X-New-Token']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  exposedHeaders: ['X-New-Token'],
+  maxAge: 86400 // 24 hours in seconds - how long the results of a preflight request can be cached
 }));
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors());
 app.use(express.json());
 
 // Rate limiting
