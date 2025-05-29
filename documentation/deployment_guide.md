@@ -22,6 +22,13 @@
 - `FIREBASE_CLIENT_EMAIL`: Firestore client email
 - `FIREBASE_PRIVATE_KEY`: Firestore private key (be sure to escape newlines properly)
 
+### Memory Management
+- The server is configured to use up to 4GB of memory (--max-old-space-size=4096)
+- If you encounter "JavaScript heap out of memory" errors, you may need to:
+  - Increase the memory limit further in package.json scripts
+  - Optimize memory-intensive operations in your code
+  - Consider adding memory monitoring and garbage collection calls
+
 ### Authentication Note
 - JWT-based authentication is used. All frontend API requests to protected endpoints must include the JWT in the `Authorization` header as a Bearer token.
 
