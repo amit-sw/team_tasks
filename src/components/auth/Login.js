@@ -5,7 +5,8 @@ import GoogleIcon from '@mui/icons-material/Google';
 const Login = () => {
   const handleGoogleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/google/url', {
+      const API_BASE = process.env.REACT_APP_API_BASE || "";
+      const response = await fetch(`${API_BASE}/api/auth/google/url`, {
         headers: {
           'Accept': 'application/json'
         }
