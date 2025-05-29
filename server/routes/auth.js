@@ -153,7 +153,17 @@ router.get('/google/callback', async (req, res) => {
       picture: data.picture
     }));
     
-    const redirectUrl = `http://localhost:3000/auth/google/callback?token=${encodeURIComponent(token)}&user=${userParam}`;
+    // Determine the client URL based on the environment
+    let clientBaseUrl;
+    if (process.env.NODE_ENV === 'production') {
+      // In production, redirect to the deployed client
+      clientBaseUrl = 'https://team-tasks-client.onrender.com';
+    } else {
+      // In development, redirect to localhost
+      clientBaseUrl = 'http://localhost:3000';
+    }
+    console.log(`Using client base URL: ${clientBaseUrl} (${process.env.NODE_ENV} environment)`);
+    const redirectUrl = `${clientBaseUrl}/auth/google/callback?token=${encodeURIComponent(token)}&user=${userParam}`;
     console.log('Redirecting to React app dashboard');
     res.redirect(redirectUrl);
   } catch (error) {
