@@ -1,0 +1,33 @@
+services:
+  # Backend API service
+  - type: web
+    name: team-tasks-server
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=384
+    autoDeploy: true
+
+  # Frontend client service
+  - type: web
+    name: team-tasks-client
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build:render
+    startCommand: npx serve -s build -l $PORT
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=384
+    autoDeploy: true

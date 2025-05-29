@@ -14,11 +14,20 @@ const Login = () => {
       }
       console.log(`Using API base URL: ${API_BASE}`);
       
+      // For production environment, redirect directly to Google OAuth
+      if (process.env.NODE_ENV === 'production') {
+        // Redirect directly to Google OAuth on the server
+        window.location.href = `${API_BASE}/api/auth/google/login-redirect`;
+        return;
+      }
+      
+      // For development, use the standard approach
       const response = await fetch(`${API_BASE}/api/auth/google/url`, {
         headers: {
           'Accept': 'application/json'
         },
-        credentials: 'include' // Include credentials for CORS requests
+        mode: 'cors',
+        credentials: 'include'
       });
       const { url } = await response.json();
       window.location.href = url;

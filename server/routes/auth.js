@@ -54,6 +54,14 @@ router.get('/google/url', (req, res) => {
   res.json({ url });
 });
 
+// Direct login redirect endpoint to bypass CORS
+router.get('/google/login-redirect', (req, res) => {
+  console.log('Direct login redirect requested');
+  const url = getAuthUrl();
+  console.log('Redirecting directly to Google OAuth:', url);
+  res.redirect(url);
+});
+
 // Google OAuth callback
 router.get('/google/callback', async (req, res) => {
   if (!req.query.code) {
