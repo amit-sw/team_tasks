@@ -9,7 +9,6 @@
 /coverage
 
 # production
-/build
 
 # misc
 .DS_Store
@@ -24,4 +23,5 @@ yarn-error.log*
 server/.env
 
 # Exclude all files in server.node_modules
-server/node_modules/
+
+# Client specific

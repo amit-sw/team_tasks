@@ -34,7 +34,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy:render": "npm run predeploy && node ./scripts/deploy-to-render.js"
+    "deploy:render": "npm run predeploy && node ../scripts/deploy-to-render.js"
   },
   "eslintConfig": {
     "extends": [
