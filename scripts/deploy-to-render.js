@@ -15,7 +15,7 @@ console.log('Starting deployment to Render.com...');
 const config = {
   client: {
     name: 'team-tasks-client',
-    buildDir: path.resolve(__dirname, '../build'),
+    buildDir: path.resolve(__dirname, '../client/build'),
     renderServiceId: process.env.RENDER_CLIENT_SERVICE_ID // Set this in your environment or .env file
   },
   server: {

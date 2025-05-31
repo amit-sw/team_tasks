@@ -23,8 +23,8 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: npm install && npm run build:render
-    startCommand: npx serve -s build -l $PORT
+    buildCommand: echo "Using pre-built assets and pre-installed node_modules from repository"
+    startCommand: cd client && npx serve -s build -l $PORT
     envVars:
       - key: NODE_ENV
         value: production
